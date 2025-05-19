@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            // Task to compile all .erl files from src/ to ebin/
+            "label": "Erlc: Compile All",
+            "type": "shell",
+            "command": "erlc", // Assumes 'erlc' is in your PATH
+            "args": [
+                "-o",
+                "lab2/ebin",
+                "lab2/*.erl" // Compile all .erl files in src (shell globbing)
+                           // Note: This might fail on Windows CMD, use 'process' type
+                           // and list files explicitly or use a different shell like Git Bash.
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$erlang"
+            ],
+            "detail": "Compiles src/*.erl into the ebin/ directory"
+        },
+        {
+            // Task to compile AND then start the Erlang shell
+            "label": "Erl: Start Shell (Build First)",
+            "type": "shell",
+            "command": "erl", // Assumes 'erl' is in your PATH
+            "args": [
+                "-pa", // Add directory to the beginning of the code path
+                "lab2/ebin" // The directory containing your compiled .beam files
+            ],
+            "dependsOn": [
+                "Erlc: Compile All" // Make sure compilation runs first
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": false,
+                "focus": true
+            },
+            "problemMatcher": [],
+            "detail": "Compiles the project and starts an Erlang shell with ebin/ added to the code path"
+        }
+    ]
+}
